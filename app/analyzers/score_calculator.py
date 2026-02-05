@@ -1,7 +1,7 @@
 import math
 from typing import Dict, List, Tuple, Optional
 
-from app.models.score import ScoreComponent, ScoreBreakdown, ArtistScoreResponse
+from app.models.score import ScoreComponent, ScoreBreakdown, ArtistScoreResponse, SentimentOverview
 from app.models.spotify import SpotifyMetrics
 from app.models.youtube import YouTubeMetrics
 from app.models.chartmetric import ChartmetricMetrics
@@ -370,11 +370,21 @@ class ScoreCalculator:
             sentiment_score=components["sentiment"],
         )
 
+        sentiment_overview = SentimentOverview(
+            overall_sentiment=sentiment.overall_category.value,
+            sentiment_score=sentiment.overall_score,
+            confidence=sentiment.confidence,
+            key_themes=sentiment.key_themes,
+            brand_safety_concerns=sentiment.brand_safety_concerns,
+            sample_size=sentiment.sample_size,
+        )
+
         return ArtistScoreResponse(
             artist_name=artist_name,
             final_score=round(final_score, 1),
             score_grade=grade,
             breakdown=breakdown,
+            sentiment_overview=sentiment_overview,
             key_strengths=self._identify_strengths(components),
             areas_for_improvement=self._identify_improvements(components),
             ai_summary=ai_summary or sentiment.summary,

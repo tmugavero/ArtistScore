@@ -12,13 +12,14 @@ class Settings(BaseSettings):
     CHARTMETRIC: str
     BRAVE_API: str
     GEMINI_API: str
+    ARTIST_SCORE_API_KEY: str  # API key for authenticating requests
 
     # Optional configuration
     CACHE_TTL: int = 3600  # 1 hour cache
     REQUEST_TIMEOUT: int = 30
     MAX_CONCURRENT_REQUESTS: int = 10
 
-    @field_validator("YOUTUBE_API", "SPOTIFY_API", "SPOTIFY_SECRET", "CHARTMETRIC", "BRAVE_API", "GEMINI_API", mode="before")
+    @field_validator("YOUTUBE_API", "SPOTIFY_API", "SPOTIFY_SECRET", "CHARTMETRIC", "BRAVE_API", "GEMINI_API", "ARTIST_SCORE_API_KEY", mode="before")
     @classmethod
     def strip_whitespace(cls, v: str) -> str:
         """Strip whitespace from API keys."""
