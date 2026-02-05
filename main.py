@@ -58,21 +58,12 @@ async def root():
         .container { max-width: 720px; padding: 48px 32px; text-align: center; }
         h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 24px; color: #fff; }
         h1 span { background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .links { display: flex; gap: 12px; justify-content: center; }
-        .links a { display: inline-block; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
-        .links a.primary { background: #6366f1; color: #fff; }
-        .links a.secondary { background: #1a1a1a; border: 1px solid #333; color: #ccc; }
-        .links a:hover { opacity: 0.85; }
+
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Artist<span>Score</span></h1>
-
-        <div class="links">
-            <a href="/docs" class="primary">Interactive Docs</a>
-            <a href="/redoc" class="secondary">API Reference</a>
-        </div>
     </div>
 </body>
 </html>"""
