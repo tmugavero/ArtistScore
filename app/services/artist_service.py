@@ -62,6 +62,7 @@ class ArtistScoringService:
     async def get_artist_score(
         self,
         artist_name: str,
+        spotify_id: Optional[str] = None,
         include_details: bool = True,
     ) -> ArtistScoreResponse:
         """
@@ -71,7 +72,7 @@ class ArtistScoringService:
         # Run all collectors in parallel
         results = await asyncio.gather(
             self.youtube.safe_collect(artist_name),
-            self.spotify.safe_collect(artist_name),
+            self.spotify.safe_collect(artist_name, spotify_id=spotify_id),
             self.chartmetric.safe_collect(artist_name),
             self.brave.safe_collect(artist_name),
             return_exceptions=True,

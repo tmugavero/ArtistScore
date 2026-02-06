@@ -18,7 +18,7 @@ class BaseCollector(ABC, Generic[T]):
         pass
 
     @abstractmethod
-    async def collect(self, artist_name: str) -> T:
+    async def collect(self, artist_name: str, **kwargs) -> T:
         """Collect and return normalized metrics."""
         pass
 
@@ -27,9 +27,9 @@ class BaseCollector(ABC, Generic[T]):
         """Create a failed result object."""
         pass
 
-    async def safe_collect(self, artist_name: str) -> T:
+    async def safe_collect(self, artist_name: str, **kwargs) -> T:
         """Wrapper with error handling for graceful degradation."""
         try:
-            return await self.collect(artist_name)
+            return await self.collect(artist_name, **kwargs)
         except Exception as e:
             return self._create_failed_result(str(e))

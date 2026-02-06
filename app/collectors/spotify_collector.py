@@ -66,8 +66,10 @@ class SpotifyCollector(BaseCollector[SpotifyMetrics]):
         except Exception:
             return []
 
-    async def collect(self, artist_name: str) -> SpotifyMetrics:
+    async def collect(self, artist_name: str, **kwargs) -> SpotifyMetrics:
         """Collect Spotify metrics for artist."""
+        spotify_id = kwargs.get("spotify_id")
+
         # Check for initialization errors
         if not self.sp:
             return SpotifyMetrics(
@@ -75,8 +77,8 @@ class SpotifyCollector(BaseCollector[SpotifyMetrics]):
                 error_message=f"Spotify API not initialized: {self._init_error or 'Invalid credentials'}",
             )
 
-        # Search for artist
-        artist_id = await self.search_artist(artist_name)
+        # Use provided spotify_id or search by name
+        artist_id = spotify_id or await self.search_artist(artist_name)
         if not artist_id:
             return SpotifyMetrics(
                 status=CollectorStatus.FAILED,

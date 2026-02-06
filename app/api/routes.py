@@ -25,6 +25,7 @@ async def verify_api_key(
 # Request/Response models
 class ScoreRequest(BaseModel):
     artist_name: str
+    spotify_id: str | None = None
     include_breakdown: bool = True
 
 
@@ -60,6 +61,7 @@ async def health_check():
 @router.get("/score/{artist_name}", response_model=ArtistScoreResponse)
 async def get_artist_score(
     artist_name: str,
+    spotify_id: str | None = Query(None, description="Spotify artist ID for precise matching"),
     include_breakdown: bool = Query(True, description="Include detailed score breakdown"),
     _api_key: str = Depends(verify_api_key),
     service: ArtistScoringService = Depends(get_scoring_service),
@@ -70,6 +72,7 @@ async def get_artist_score(
     Requires `X-API-Key` header.
 
     - **artist_name**: Name of the artist to score
+    - **spotify_id**: Optional Spotify artist ID for precise matching
     - **include_breakdown**: Whether to include detailed component scores
 
     Returns a 0-100 score with breakdown and AI-generated insights.
@@ -77,6 +80,7 @@ async def get_artist_score(
     try:
         return await service.get_artist_score(
             artist_name=artist_name,
+            spotify_id=spotify_id,
             include_details=include_breakdown,
         )
     except ValueError as e:
@@ -97,6 +101,7 @@ async def score_artist(
     try:
         return await service.get_artist_score(
             artist_name=request.artist_name,
+            spotify_id=request.spotify_id,
             include_details=request.include_breakdown,
         )
     except ValueError as e:
@@ -108,6 +113,7 @@ async def score_artist(
 @router.get("/score/{artist_name}/quick", response_model=QuickScoreResponse)
 async def get_quick_score(
     artist_name: str,
+    spotify_id: str | None = Query(None, description="Spotify artist ID for precise matching"),
     _api_key: str = Depends(verify_api_key),
     service: ArtistScoringService = Depends(get_scoring_service),
 ):
@@ -117,6 +123,7 @@ async def get_quick_score(
     try:
         result = await service.get_artist_score(
             artist_name=artist_name,
+            spotify_id=spotify_id,
             include_details=False,
         )
         return QuickScoreResponse(
